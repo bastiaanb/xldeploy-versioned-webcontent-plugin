@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    Note: If you modify this file, you must restart the XL Deploy server.
+  -->
+  <synthetic xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd" xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+   <type type="www.VersionedPublishedWebContent" extends="www.PublishedWebContent" deployable-type="www.VersionedWebContent">
+    <property name="targetDirectory" description="Target directory name" hidden="true" default="&lt;#assign target=(deployed.virtualHost.documentRoot)!''/&gt;&lt;#if target != ''&gt;${target}/${deployed.deployedApplication.version.name}&lt;#else&gt;${deployed.container.defaultDocumentRoot}/${deployed.deployedApplication.version.name}&lt;/#if&gt;"/>
+    <property name="symlinkName" default="current" required="false" />
+    <property name="createVerb" default="Deploy new" hidden="true" />
+    <property name="destroyVerb" default="Remove old" hidden="true" />
+    <property name="destroyOrder" default="110" kind="integer" hidden="true" />
+    <property name="createTargetDirectory" default="true" kind="boolean" hidden="true" /<name />
+    <property name="buildCommand" default="" />
+  </type>
+
+  <type type="www.VersionedWebContent" extends="www.WebContent">
+   <property name="symlinkName" default="current" required="false" />
+   <property name="buildCommand" default="" required="false" />
+ </type>
+</synthetic>

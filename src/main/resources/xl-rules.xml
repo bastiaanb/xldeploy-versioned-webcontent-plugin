@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+    Note: If you modify this file and automatic reloading is disabled in `planner.conf`, you must restart the XL Deploy server.
+  -->
+  <rules xmlns="http://www.xebialabs.com/xl-deploy/xl-rules">
+    <!-- Add your <rule ...> and <disable-rule ...> elements here -->
+
+    <rule name="www.VersionedPublishedWebContent.CREATE_MODIFY" scope="deployed">
+      <conditions>
+        <type>www.VersionedPublishedWebContent</type>
+        <operation>CREATE</operation>
+        <operation>MODIFY</operation>
+      </conditions>
+      <steps>
+        <os-script>
+         <description expression="true">"Symlink %s to %s" % (deployed.name, deployed.symlinkName)</description>
+         <script>www/link-webcontent</script>
+         <upload-artifacts>false</upload-artifacts>
+         <order expression="true">90</order>
+       </os-script>
+     </steps>
+   </rule>
+
+   <rule name="generic.CopiedArtifact.invokeBuild.CREATE_MODIFY" scope="deployed">
+    <conditions>
+      <type>generic.CopiedArtifact</type>
+      <operation>CREATE</operation>
+      <operation>MODIFY</operation>
+      <expression>deployed.buildCommand != ""</expression>
+    </conditions>
+    <steps>
+      <os-script>
+        <description expression="true">"Invoke build on %s" % deployed.name</description>
+        <script>generic/invoke-build</script>
+        <upload-artifacts>false</upload-artifacts>
+        <order expression="true">deployed.createOrder + 1</order>
+      </os-script>
+    </steps>
+  </rule>
+
+</rules>
