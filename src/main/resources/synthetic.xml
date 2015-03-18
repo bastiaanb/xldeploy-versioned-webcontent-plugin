@@ -10,7 +10,7 @@
     <property name="createVerb" default="Deploy new" hidden="true" />
     <property name="destroyVerb" default="Remove old" hidden="true" />
     <property name="destroyOrder" default="110" kind="integer" hidden="true" />
-    <property name="createTargetDirectory" default="true" kind="boolean" hidden="true" /<name />
+    <property name="createTargetDirectory" default="true" kind="boolean" hidden="true" />
     <property name="buildCommand" default="" />
   </type>
 
