@@ -13,29 +13,44 @@
       </conditions>
       <steps>
         <os-script>
-         <description expression="true">"Symlink %s to %s" % (deployed.name, deployed.symlinkName)</description>
-         <script>www/link-webcontent</script>
-         <upload-artifacts>false</upload-artifacts>
-         <order expression="true">90</order>
-       </os-script>
-     </steps>
-   </rule>
+          <description expression="true">"Symlink %s to %s" % (deployed.name, deployed.nextSymlinkName)</description>
+          <script>www/link-webcontent</script>
+          <freemarker-context>
+            <linkTarget expression="true">deployed.nextSymlinkName</linkTarget>
+          </freemarker-context>
+          <upload-artifacts>false</upload-artifacts>
+          <order expression="true">deployed.createOrder + 2</order>
+        </os-script>
+        <os-script>
+          <description expression="true">"Symlink %s to %s" % (deployed.name, deployed.currentSymlinkName)</description>
+          <script>www/link-webcontent</script>
+          <freemarker-context>
+            <linkTarget expression="true">deployed.currentSymlinkName</linkTarget>
+          </freemarker-context>
+          <upload-artifacts>false</upload-artifacts>
+          <order expression="true">90</order>
+        </os-script>
+      </steps>
+    </rule>
 
-   <rule name="generic.CopiedArtifact.invokeBuild.CREATE_MODIFY" scope="deployed">
-    <conditions>
-      <type>generic.CopiedArtifact</type>
-      <operation>CREATE</operation>
-      <operation>MODIFY</operation>
-      <expression>deployed.buildCommand != ""</expression>
-    </conditions>
-    <steps>
-      <os-script>
-        <description expression="true">"Invoke build on %s" % deployed.name</description>
-        <script>generic/invoke-build</script>
-        <upload-artifacts>false</upload-artifacts>
-        <order expression="true">deployed.createOrder + 1</order>
-      </os-script>
-    </steps>
-  </rule>
+    <rule name="generic.CopiedArtifact.invokeBuild.CREATE_MODIFY" scope="deployed">
+      <conditions>
+        <type>www.VersionedPublishedWebContent</type>
+        <!-- switch to generic.CopiedArtifact once we have to deployed.buildCommand expression working for deployed without this property
+        <type>generic.CopiedArtifact</type>
+        -->
+        <operation>CREATE</operation>
+        <operation>MODIFY</operation>
+        <expression>deployed.buildCommand != ''</expression>
+      </conditions>
+      <steps>
+        <os-script>
+          <description expression="true">"Invoke build on %s" % deployed.name</description>
+          <script>generic/invoke-build</script>
+          <upload-artifacts>false</upload-artifacts>
+          <order expression="true">deployed.createOrder + 1</order>
+        </os-script>
+      </steps>
+    </rule>
 
-</rules>
+  </rules>
